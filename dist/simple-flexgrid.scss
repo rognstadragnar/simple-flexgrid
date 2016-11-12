@@ -1,0 +1,164 @@
+/* SIMPLE FLEXGRID */
+@import "partials/settings.scss";
+@mixin makeTheGrid($breakpoints, $gridbase: 12, $gutterbase: 0px, $pf: null) {
+     @if ($pf){
+        $pf: $pf + "-";
+    }
+    @else {
+        $pf: null;
+    }
+    @each $bp, $bpvalue in $breakpoints {
+         @if ($bpvalue == map-get($breakpoints, xl)){
+            @for $j from $gridbase through 0 {
+                $width: $j / $gridbase;
+                @if ($j == $gridbase) {
+                    .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
+                        width: -webkit-calc(#{percentage($width)});
+                        width: calc(#{percentage($width)});
+                        max-width: -webkit-calc(#{percentage($width)});
+                        max-width: calc(#{percentage($width)});
+                        height: auto;
+                        margin-bottom: $gutterbase;
+                        box-sizing: border-box;
+                    }
+                }
+                @elseif ($j == 0) {
+                    .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
+                        width: 0;
+                        height: 0;
+                        margin-left: 0;
+                        margin-right: 0;
+                        margin-bottom: 0;
+                    }
+
+                    .#{$pf}#{$bp}-push-#{$j}-#{$gridbase} {
+                        margin-left: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                        margin-left: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                    }
+
+                    .#{$pf}#{$bp}-space-#{$j}-#{$gridbase} {
+                        margin-right: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                        margin-right: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                    }
+                }
+                @else {
+                    .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
+                        width: -webkit-calc(#{percentage($width)} - #{$gutterbase} * #{$width});
+                        width: calc(#{percentage($width)} - #{$gutterbase} * #{$width});
+                        max-width: -webkit-calc(#{percentage($width)} - #{$gutterbase} * #{$width});
+                        max-width: calc(#{percentage($width)} - #{$gutterbase} * #{$width});
+                        height: auto;
+                        margin-bottom: $gutterbase;
+                        box-sizing: border-box;
+                    }
+
+                    .#{$pf}#{$bp}-push-#{$j}-#{$gridbase} {
+                        margin-left: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                        margin-left: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                    }
+
+                    .#{$pf}#{$bp}-space-#{$j}-#{$gridbase} {
+                        margin-right: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                        margin-right: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                    }
+                }
+            }
+        }
+        @else {
+             @media screen and (max-width: $bpvalue){
+                @for $j from $gridbase through 0 {
+                    $width: $j / $gridbase;
+                    @if ($j == $gridbase) {
+                        .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
+                            width: -webkit-calc(#{percentage($width)});
+                            width: calc(#{percentage($width)});
+                            max-width: -webkit-calc(#{percentage($width)});
+                            max-width: calc(#{percentage($width)});
+                            height: auto;
+                            margin-bottom: $gutterbase;
+                            box-sizing: border-box;
+                        }
+                    }
+                    @elseif ($j == 0) {
+                        .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
+                            display: none;
+                        }
+
+                        .#{$pf}#{$bp}-push-#{$j}-#{$gridbase} {
+                            margin-left: 0;
+                        }
+
+                        .#{$pf}#{$bp}-space-#{$j}-#{$gridbase} {
+                            margin-right: 0;
+                        }
+                    }
+                    @else {
+                        .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
+                            width: -webkit-calc(#{percentage($width)} - #{$gutterbase} * #{$width});
+                            width: calc(#{percentage($width)} - #{$gutterbase} * #{$width});
+                            max-width: -webkit-calc(#{percentage($width)} - #{$gutterbase} * #{$width});
+                            max-width: calc(#{percentage($width)} - #{$gutterbase} * #{$width});
+                            height: auto;
+                            margin-bottom: $gutterbase;
+                            box-sizing: border-box;
+                        }
+
+                        .#{$pf}#{$bp}-push-#{$j}-#{$gridbase} {
+                            margin-left: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                            margin-left: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                        }
+
+                        .#{$pf}#{$bp}-space-#{$j}-#{$gridbase} {
+                            margin-right: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                            margin-right: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@mixin simpleFlexgrid($prefix: $_prefix, $gridbase: $_gridbase, $gutters: $_guttersize, $smallValue: $_sm, $mediumValue: $_md, $largeValue: $_lg, $xlargeValue: $_xl) {
+    $breakpoints: (xl: $xlargeValue, lg: $largeValue, md: $mediumValue, sm: $smallValue);
+    @include makeTheGrid($breakpoints, $gridbase, $gutters, $prefix);
+
+    .indented-row {
+        overflow-wrap: break-word;
+        overflow-x: hidden;
+        overflow-y: visible;
+        position: relative;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        width: calc(100% - #{$gutters} * 2);
+        width: -webkit-calc(100% - #{$gutters} * 2);
+        margin-left: $gutters;
+    }
+
+    .row {
+        overflow-wrap: break-word;
+        overflow-x: hidden;
+        overflow-y: visible;
+        position: relative;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        width: 100%;
+    }
+}

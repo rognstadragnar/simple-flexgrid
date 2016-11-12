@@ -1,0 +1,29 @@
+{
+  "name": "simple-flexgrid",
+  "version": "0.1.0",
+  "description": "A simple, yet customizable flexbox-based grid written in SCSS",
+  "main": "dist/simple-grid.css",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" ∂&& exit 1",
+    "build": "node-sass --output-style compressed dist/example-use.scss ./dist/simple-flexgrid.css",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rognstadragnar/simple-flexgrid.git"
+  },
+  "keywords": [
+    "flexbox",
+    "grid",
+    "scss"
+  ],
+  "author": "Ragnar Aasen Rognstad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rognstadragnar/simple-flexgrid/issues"
+  },
+  "homepage": "https://github.com/rognstadragnar/simple-flexgrid#readme",
+  "devDependencies": {
+    "node-sass": "^3.11.3"
+  }
+}
