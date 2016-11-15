@@ -23,7 +23,6 @@ Alternatively using unpkg.com as a CDN
 This generates just the CSS you use. No more, no less.
 ```SCSS
 // in SCSS
-
 import 'path/to/simple-flexgrid.scss';
 
 .some-container {
@@ -31,9 +30,7 @@ import 'path/to/simple-flexgrid.scss';
 }
 
 .some-content {
-    @include col(6, 12, 8px); // will generate a 6/12th column with an 8px gutter
-    // Only the first parameter is mandatory.
-    // Default settings will be used if optional parameters are left out.
+    @include col(4, 12, 8px);
 
     @include mq('max-width: 800px') {
         @include col(6, 12, 8px);
@@ -44,34 +41,45 @@ import 'path/to/simple-flexgrid.scss';
     }
 }
 ```
+##### Rows (row)
+This mixin creates the grid parent.
 
+##### Columns (col)
+This mixin creates a column that spans the x/y-ths of the parent row, where x is the first parameter and mandatory, while y is the second parameter (and optional). The third parameter sets the size of the columns gutter (also optional).
+
+##### Media queries (mq)
+Media queries are an essential part of any grid system, and they get tedious to write. Simple-flexgrid contains a short mixin to solve that.
 
 ### 2. The lazy way
-This generates a huge overhead of CSS classes, but hey it's easy.
+This way generates a huge overhead of CSS classes, but hey it's easy.
+
 ```SCSS
 // In SCSS file
 import 'path/to/simple-flexgrid.scss';
 
-
-
-// This will generate a 10-based grid with 0px gutters and the names of the clasess have the prefix 'myPrefix'.
-// Custom breakpoints where sm=350px, md=500px, lg=750px, xl=1100px
-@include simpleFlexgrid('myPrefix', 10, 0px, (350px, 500px, 750px, 1100px));
-// All parameters are optional and default settings will be used if left out.
+@include simpleFlexgrid('my-prefix', 10, 0px, (350px, 500px, 750px, 1100px));
 ```
+
+The following code generated a 10-based grid with 0px gutters, the names of the clasess have the prefix 'my-prefix', as well as custom brakepoints.
+
+
+All parameters are optional and default settings will be used if left out.
 
 ```HTML
 <!-- in HTML -->
 <div class='row'>
-    <div class="xl-6-12 md-12-12">Some content</div>
-    <div class="xl-6-12 md-12-12">Some other content</div>
+    <div class="my-prefix-xl-6-12 my-prefix-md-12-12">Some content</div>
+    <div class="my-prefix-xl-6-12 my-prefix-md-12-12">Some other content</div>
 </div>
 ```
 
-
 ### 3. The old school way
-Using an Simple Flexgrid with an external stylesheet
+Using Simple Flexgrid as an external stylesheet.
+
+The precompiled CSS version of Simple Flexgrid is using the default settings.
+
  ```HTML
+ <!-- In HTML -->
 <head>
     <link rel="stylesheet" href="path/to/simple-flexgrid.css">
 </head>
@@ -86,8 +94,10 @@ Using an Simple Flexgrid with an external stylesheet
 
 ## Misc.
 Simple-flexgrid has a few helper classes
-#### Pusher classes
+##### Pusher classes
 The example below will push the element 2/12th of the containing row.
+All parameters are optional, and default settings will be used if left out.
+
 ```SCSS
 // In SCSS
 .my-class {
@@ -99,14 +109,13 @@ Alternatively
 <!-- in HTML -->
 <div class='xl-push-2-12'></div>
 ```
-#### Spacer classes
+##### Spacer classes
 The example below will push the next element 2/12th of the containing row.
+All parameters are optional, and default settings will be used if left out.
 ```SCSS
 // In SCSS
 .my-class {
     @include space(2, 12, 8px);
-    // All parameters are optional.
-    // Default settings will be used if left out.
 }
 ```
 Alternatively
