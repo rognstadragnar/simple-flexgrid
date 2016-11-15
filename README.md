@@ -91,7 +91,7 @@ The example below will push the element 2/12th of the containing row.
 ```SCSS
 // In SCSS
 .my-class {
-    include push(2, 12, 8px);
+    @include push(2, 12, 8px);
 }
 ```
 Alternatively
@@ -104,7 +104,7 @@ The example below will push the next element 2/12th of the containing row.
 ```SCSS
 // In SCSS
 .my-class {
-    include space(2, 12, 8px);
+    @include space(2, 12, 8px);
     // All parameters are optional.
     // Default settings will be used if left out.
 }
