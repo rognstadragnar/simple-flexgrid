@@ -1,6 +1,6 @@
 {
   "name": "simple-flexgrid",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple, yet customizable flexbox-based grid written in SCSS",
   "main": "dist/simple-grid.css",
   "scripts": {
