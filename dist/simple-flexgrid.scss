@@ -1,5 +1,88 @@
+@import "_config";
+// --------------------
+
+@mixin mq($query) {
+  @media screen and ($query) {
+      @content;
+  }
+}
+
+@mixin col($v, $of: 12, $gutter: $_guttersize) {
+  $width: null;
+  @if ($v != $of) {
+      $width: #{percentage($v / $of)} - #{$gutter} * #{1 - $v / $of};
+} @else {$width: #{percentage($v / $of)}}
+  @if ($v != 0) {
+    width: -webkit-calc(#{$width});
+    width: calc(#{$width});
+    max-width: -webkit-calc(#{$width});
+    max-width: calc(#{$width});
+    margin-bottom: $gutter;
+    box-sizing: border-box;
+    display: block;
+  } @else {display: none;}
+}
+@mixin push($v, $of, $gutter: $_guttersize) {
+  $width: #{percentage($v / $of)} - #{$gutter} * #{1 - $v / $of};
+  @if ($v != 0) {
+    margin-left: -webkit-calc(#{$width});
+    margin-left: calc(#{$width});
+  } @else {
+    margin-left: 0;
+  }
+}
+@mixin space($v, $of, $gutter: $_guttersize) {
+  $width: #{percentage($v / $of)} - #{$gutter} * #{1 - $v / $of};
+  @if ($v != 0) {
+    margin-right: -webkit-calc(#{$width});
+    margin-right: calc(#{$width});
+  } @else {
+    margin-right: 0;
+  }
+}
+@mixin row() {
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+  overflow-y: visible;
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+@mixin indentedRow($gutters: $_guttersize) {
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+  overflow-y: visible;
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  width: calc(100%);
+  width: -webkit-calc(100%);
+  padding: $gutters $gutters 0;
+  box-sizing: border-box;
+}
+
+
 /* SIMPLE FLEXGRID */
-@import "partials/settings.scss";
 @mixin makeTheGrid($breakpoints, $gridbase: 12, $gutterbase: 0px, $pf: null) {
      @if ($pf){
         $pf: $pf + "-";
@@ -7,110 +90,52 @@
     @else {
         $pf: null;
     }
+  .row {@include row();}
+  .indented-row {@include indentedRow();}
     @each $bp, $bpvalue in $breakpoints {
          @if ($bpvalue == map-get($breakpoints, xl)){
             @for $j from $gridbase through 0 {
                 $width: $j / $gridbase;
                 @if ($j == $gridbase) {
-                    .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
-                        width: -webkit-calc(#{percentage($width)});
-                        width: calc(#{percentage($width)});
-                        max-width: -webkit-calc(#{percentage($width)});
-                        max-width: calc(#{percentage($width)});
-                        height: auto;
-                        margin-bottom: $gutterbase;
-                        box-sizing: border-box;
-                    }
-                }
-                @elseif ($j == 0) {
-                    .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
-                        width: 0;
-                        height: 0;
-                        margin-left: 0;
-                        margin-right: 0;
-                        margin-bottom: 0;
-                    }
-
-                    .#{$pf}#{$bp}-push-#{$j}-#{$gridbase} {
-                        margin-left: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
-                        margin-left: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
-                    }
-
-                    .#{$pf}#{$bp}-space-#{$j}-#{$gridbase} {
-                        margin-right: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
-                        margin-right: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                  .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
+                        @include col($j, $gridbase, $gutterbase);
                     }
                 }
                 @else {
                     .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
-                        width: -webkit-calc(#{percentage($width)} - #{$gutterbase} * #{$width});
-                        width: calc(#{percentage($width)} - #{$gutterbase} * #{$width});
-                        max-width: -webkit-calc(#{percentage($width)} - #{$gutterbase} * #{$width});
-                        max-width: calc(#{percentage($width)} - #{$gutterbase} * #{$width});
-                        height: auto;
-                        margin-bottom: $gutterbase;
-                        box-sizing: border-box;
+                      @include col($j, $gridbase, $gutterbase);
                     }
 
                     .#{$pf}#{$bp}-push-#{$j}-#{$gridbase} {
-                        margin-left: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
-                        margin-left: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                        @include push($j, $gridbase, $gutterbase);
                     }
 
                     .#{$pf}#{$bp}-space-#{$j}-#{$gridbase} {
-                        margin-right: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
-                        margin-right: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                      @include space($j, $gridbase, $gutterbase);
                     }
                 }
             }
         }
         @else {
-             @media screen and (max-width: $bpvalue){
+             @include mq("max-width: " + $bpvalue){
                 @for $j from $gridbase through 0 {
                     $width: $j / $gridbase;
                     @if ($j == $gridbase) {
                         .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
-                            width: -webkit-calc(#{percentage($width)});
-                            width: calc(#{percentage($width)});
-                            max-width: -webkit-calc(#{percentage($width)});
-                            max-width: calc(#{percentage($width)});
-                            height: auto;
-                            margin-bottom: $gutterbase;
-                            box-sizing: border-box;
-                        }
-                    }
-                    @elseif ($j == 0) {
-                        .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
-                            display: none;
-                        }
-
-                        .#{$pf}#{$bp}-push-#{$j}-#{$gridbase} {
-                            margin-left: 0;
-                        }
-
-                        .#{$pf}#{$bp}-space-#{$j}-#{$gridbase} {
-                            margin-right: 0;
+                          @include col($j, $gridbase, $gutterbase);
                         }
                     }
                     @else {
                         .#{$pf}#{$bp}-#{$j}-#{$gridbase} {
-                            width: -webkit-calc(#{percentage($width)} - #{$gutterbase} * #{$width});
-                            width: calc(#{percentage($width)} - #{$gutterbase} * #{$width});
-                            max-width: -webkit-calc(#{percentage($width)} - #{$gutterbase} * #{$width});
-                            max-width: calc(#{percentage($width)} - #{$gutterbase} * #{$width});
-                            height: auto;
-                            margin-bottom: $gutterbase;
-                            box-sizing: border-box;
+                          @include col($j, $gridbase, $gutterbase);
                         }
 
                         .#{$pf}#{$bp}-push-#{$j}-#{$gridbase} {
-                            margin-left: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
-                            margin-left: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                          @include push($j, $gridbase, $gutterbase);
                         }
 
                         .#{$pf}#{$bp}-space-#{$j}-#{$gridbase} {
-                            margin-right: -webkit-calc(#{percentage($width)} + #{$gutterbase} * #{$width});
-                            margin-right: calc(#{percentage($width)} + #{$gutterbase} * #{$width});
+                          @include space($j, $gridbase, $gutterbase);
                         }
                     }
                 }
@@ -118,47 +143,7 @@
         }
     }
 }
-@mixin simpleFlexgrid($prefix: $_prefix, $gridbase: $_gridbase, $gutters: $_guttersize, $smallValue: $_sm, $mediumValue: $_md, $largeValue: $_lg, $xlargeValue: $_xl) {
-    $breakpoints: (xl: $xlargeValue, lg: $largeValue, md: $mediumValue, sm: $smallValue);
-    @include makeTheGrid($breakpoints, $gridbase, $gutters, $prefix);
 
-    .indented-row {
-        overflow-wrap: break-word;
-        overflow-x: hidden;
-        overflow-y: visible;
-        position: relative;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-flex-wrap: wrap;
-        -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-        -webkit-box-pack: justify;
-        -webkit-justify-content: space-between;
-        -ms-flex-pack: justify;
-        justify-content: space-between;
-        width: calc(100% - #{$gutters} * 2);
-        width: -webkit-calc(100% - #{$gutters} * 2);
-        margin-left: $gutters;
-    }
-
-    .row {
-        overflow-wrap: break-word;
-        overflow-x: hidden;
-        overflow-y: visible;
-        position: relative;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-flex-wrap: wrap;
-        -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-        -webkit-box-pack: justify;
-        -webkit-justify-content: space-between;
-        -ms-flex-pack: justify;
-        justify-content: space-between;
-        width: 100%;
-    }
+@mixin simpleFlexgrid($prefix: $_prefix, $gridbase: $_gridbase, $gutters: $_guttersize, $bp-sm: map-get($breakpoints, sm), $bp-md: map-get($breakpoints, md), $bp-lg: map-get($breakpoints, lg), $bp-xl: map-get($breakpoints, xl)) {
+    @include makeTheGrid((xl: $bp-xl, lg: $bp-lg, md: $bp-md, sm: $bp-sm), $gridbase, $gutters, $prefix);
 }

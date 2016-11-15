@@ -2,15 +2,14 @@
 
 // Default prefix (e.g. myprefix-lg-6-12)
 $_prefix: false; //set as either string or false
-
 // Default gridbase
 $_gridbase: 12;
-
 // Default guttersize
-$_guttersize: 8px;
-
+$_guttersize: 16px;
 // Default breakpoints
-$_xl: 1200px;
-$_lg: 800px;
-$_md: 650px;
-$_sm: 450px;
+$breakpoints: (
+  sm: 450px,
+  md: 650px,
+  lg: 800px,
+  xl: 1200px
+);
